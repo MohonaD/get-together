@@ -18,7 +18,7 @@ class User(UserMixin, db.Model):
     username = db.Column(db.String(150), unique=True, nullable=False)
     password = db.Column(db.String(150), nullable=False)
     role = db.Column(db.String(20), nullable=False, default='personal')
-    home_location = db.Column(db.String(200))
+
 
 class Event(db.Model):
     id = db.Column(db.Integer, primary_key=True)
@@ -37,13 +37,7 @@ def load_user(user_id):
 def index():
     location = request.args.get('location')
     query = Event.query
-    if not location and current_user.is_authenticated and current_user.home_location:
-        location = current_user.home_location
-        flash(f"Showing events near {location}")
-    if location:
-        query = query.filter(Event.location.ilike(f"%{location}%"))
-    events = query.order_by(Event.date.asc()).all()
-    return render_template('index.html', events=events, selected_location=location)
+
 
 @app.route('/register', methods=['GET', 'POST'])
 def register():
@@ -51,14 +45,8 @@ def register():
         username = request.form['username']
         password = request.form['password']
         role = request.form.get('role', 'personal')
-        home_location = request.form.get('home_location')
-        if User.query.filter_by(username=username).first():
-            flash('Username already exists')
-            return redirect(url_for('register'))
-        user = User(username=username,
-                    password=generate_password_hash(password),
-                    role=role,
-                    home_location=home_location)
+
+        
         db.session.add(user)
         db.session.commit()
         login_user(user)
