@@ -1,6 +1,7 @@
 {% extends 'base.html' %}
 {% block content %}
 <h1>Upcoming Events</h1>
+
 <form method="get" action="/">
   <input type="text" name="location" placeholder="Search by location" value="{{ request.args.location }}"/>
   <button type="submit">Search</button>

@@ -19,6 +19,7 @@ class User(UserMixin, db.Model):
     password = db.Column(db.String(150), nullable=False)
     role = db.Column(db.String(20), nullable=False, default='personal')
 
+
 class Event(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     title = db.Column(db.String(200), nullable=False)
@@ -36,10 +37,7 @@ def load_user(user_id):
 def index():
     location = request.args.get('location')
     query = Event.query
-    if location:
-        query = query.filter(Event.location.ilike(f"%{location}%"))
-    events = query.order_by(Event.date.asc()).all()
-    return render_template('index.html', events=events)
+
 
 @app.route('/register', methods=['GET', 'POST'])
 def register():
@@ -47,10 +45,8 @@ def register():
         username = request.form['username']
         password = request.form['password']
         role = request.form.get('role', 'personal')
-        if User.query.filter_by(username=username).first():
-            flash('Username already exists')
-            return redirect(url_for('register'))
-        user = User(username=username, password=generate_password_hash(password), role=role)
+
+        
         db.session.add(user)
         db.session.commit()
         login_user(user)

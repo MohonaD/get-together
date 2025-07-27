@@ -12,7 +12,7 @@ source venv/bin/activate
 pip install -r requirements.txt
 ```
 
-Initialise the database:
+
 
 ```bash
 python -c 'from app import db; db.create_all()'
@@ -30,5 +30,6 @@ flask run
 - Create and list events by location
 - Chronological timeline of upcoming events
 - Simple location search to find events near you
+
 
 This is only a minimal prototype and does not include production security or a full feature set.
